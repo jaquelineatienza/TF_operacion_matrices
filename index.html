@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>elegir el numero de filas de la primer matriz</h1>
+    <input type="number" id="x1" value="2" />
+    <h4>elegir el numero de columnas de la primer matriz</h4>
+    <input type="number" id="y1" value="2" />
+    <h4>elegir el numero de filas de la segunda matriz</h4>
+    <input type="number" id="x2" value="2" />
+    <h4>elegir el numero de columas de la segunda matriz</h4>
+    <input type="number" id="y2" value="2" />
+    <button type="button" id="generar">generar</button>
+    <h3>Matriz 1</h3>
+    <div id="matriz1"></div>
+
+    <h3>Matriz 2</h3>
+    <div id="matriz2"></div>
+
+    <h4>Resultado de la Suma</h4>
+    <div id="suma"></div>
+
+    <h4>Resultado de la Multiplicación (elemento a elemento)</h4>
+    <div id="producto"></div>
+
+    <script>
+      const btn = document.getElementById("generar");
+
+      btn.addEventListener("click", async () => {
+        const x1 = parseInt(document.getElementById("x1").value);
+        const y1 = parseInt(document.getElementById("y1").value);
+        const x2 = parseInt(document.getElementById("x2").value);
+        const y2 = parseInt(document.getElementById("y2").value);
+
+        const matriz = tf.randomUniform([x1, y1], 1, 20, "int32");
+        const matriz2 = tf.randomUniform([x2, y2], 1, 20, "int32");
+
+        const sumResult = matriz.add(matriz2);
+        const mulResult = matriz.mul(matriz2);
+
+        // Función para pintar en tabla HTML
+        async function mostrarEnTabla(tensor, contenedorId) {
+          const data = await tensor.array();
+          const contenedor = document.getElementById(contenedorId);
+          let html = "<table border='1' cellpadding='5'>";
+          data.forEach((fila) => {
+            html += "<tr>";
+            fila.forEach((valor) => {
+              html += `<td>${valor}</td>`;
+            });
+            html += "</tr>";
+          });
+          html += "</table>";
+          contenedor.innerHTML = html;
+        }
+
+        mostrarEnTabla(matriz, "matriz1");
+        mostrarEnTabla(matriz2, "matriz2");
+        mostrarEnTabla(sumResult, "suma");
+        mostrarEnTabla(mulResult, "producto");
+      });
+    </script>
+  </body>
+</html>
